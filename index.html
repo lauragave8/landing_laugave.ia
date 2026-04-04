@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laura Gave — IA para tu Empresa</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0E0E0C;
+  --surface:   #161614;
+  --surface2:  #1E1E1C;
+  --surface3:  #252522;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.12);
+  --teal:      #1D9E75;
+  --teal-soft: #5DCAA5;
+  --teal-dim:  rgba(29,158,117,0.10);
+  --teal-glow: rgba(29,158,117,0.20);
+  --text:      #F2F0EB;
+  --muted:     rgba(242,240,235,0.52);
+  --hint:      rgba(242,240,235,0.26);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 max(2rem,5vw);height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(14,14,12,0.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text);text-decoration:none;letter-spacing:-0.02em;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;gap:2rem;align-items:center;}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{background:var(--teal)!important;color:#0E0E0C!important;font-weight:600!important;padding:8px 18px!important;border-radius:6px!important;font-size:13px!important;}
+.nav-cta:hover{opacity:.85;}
+.nav-mob{display:none;background:none;border:none;cursor:pointer;color:var(--text);font-size:22px;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;padding:100px max(2rem,5vw) 80px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+.hero-bg-grid{position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(29,158,117,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(29,158,117,0.04) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black 20%,transparent 100%);}
+.hero-glow{position:absolute;top:-80px;right:-80px;width:560px;height:560px;background:radial-gradient(circle,rgba(29,158,117,0.09) 0%,transparent 65%);z-index:0;pointer-events:none;}
+.hero-glow2{position:absolute;bottom:-100px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(29,158,117,0.04) 0%,transparent 65%);z-index:0;pointer-events:none;}
+
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;max-width:1100px;margin:0 auto;width:100%;}
+
+/* LEFT — copy */
+.hero-copy{}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--teal-soft);margin-bottom:22px;}
+.hero-eyebrow::before{content:'';display:block;width:24px;height:1.5px;background:var(--teal-soft);}
+.hero-title{font-family:'DM Serif Display',serif;font-size:clamp(32px,4.5vw,54px);font-weight:400;line-height:1.1;letter-spacing:-0.02em;color:var(--text);margin-bottom:22px;}
+.hero-title em{font-style:italic;color:var(--teal-soft);}
+.hero-sub{font-size:clamp(14px,1.3vw,16px);color:var(--muted);line-height:1.8;max-width:460px;margin-bottom:36px;}
+.hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:48px;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#0E0E0C;font-size:14px;font-weight:600;padding:13px 26px;border-radius:8px;text-decoration:none;transition:transform .15s,opacity .15s;border:none;cursor:pointer;}
+.btn-primary:hover{transform:translateY(-1px);opacity:.9;}
+.btn-secondary{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:14px;text-decoration:none;transition:color .2s;border:none;background:none;cursor:pointer;}
+.btn-secondary:hover{color:var(--text);}
+.btn-arrow{transition:transform .2s;}
+.btn-secondary:hover .btn-arrow{transform:translateX(4px);}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.hero-stat-num{font-family:'DM Serif Display',serif;font-size:26px;color:var(--teal-soft);line-height:1;margin-bottom:3px;}
+.hero-stat-label{font-size:11px;color:var(--hint);line-height:1.5;}
+
+/* RIGHT — VSL */
+.hero-vsl{display:flex;flex-direction:column;justify-content:center;}
+.vsl-frame-hero{width:100%;aspect-ratio:16/9;background:var(--surface2);border-radius:16px;border:1px solid var(--border2);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.vsl-frame-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--teal-dim) 0%,transparent 50%),radial-gradient(ellipse 60% 40% at 50% 50%,rgba(29,158,117,0.06) 0%,transparent 70%);}
+.vsl-glow-ring{position:absolute;inset:-1px;border-radius:17px;background:linear-gradient(135deg,rgba(29,158,117,0.5),transparent 50%,rgba(93,202,165,0.25));z-index:-1;}
+.vsl-inner{position:relative;z-index:1;text-align:center;padding:1.5rem;}
+.vsl-play{width:64px;height:64px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 36px rgba(29,158,117,0.4);transition:transform .2s;}
+.vsl-frame-hero:hover .vsl-play{transform:scale(1.08);}
+.vsl-title{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text);margin-bottom:6px;}
+.vsl-sub{font-size:12px;color:var(--hint);}
+.vsl-badge{position:absolute;bottom:14px;right:14px;font-size:11px;font-weight:500;color:var(--muted);background:rgba(14,14,12,0.6);padding:4px 10px;border-radius:20px;backdrop-filter:blur(6px);}
+.vsl-note{display:none;}
+
+/* ── SECTION BASE ── */
+.section{padding:80px max(2rem,5vw);}
+.section.dark{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.sec-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--teal-soft);text-align:center;margin-bottom:10px;}
+.sec-title{font-family:'DM Serif Display',serif;font-size:clamp(24px,3vw,38px);font-weight:400;letter-spacing:-0.02em;color:var(--text);text-align:center;margin-bottom:10px;}
+.sec-sub{font-size:15px;color:var(--muted);text-align:center;max-width:480px;margin:0 auto 48px;line-height:1.75;}
+
+/* ── SERVICIOS (from portafolio) ── */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:1000px;margin:0 auto;}
+.svc-card{background:var(--surface);padding:28px 24px;transition:background .2s;position:relative;}
+.svc-card:hover{background:var(--surface2);}
+.svc-accent{height:3px;position:absolute;top:0;left:0;right:0;}
+.svc-icon{font-size:26px;margin-bottom:14px;display:block;}
+.svc-num{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--hint);margin-bottom:6px;}
+.svc-name{font-size:15px;font-weight:500;color:var(--text);margin-bottom:8px;line-height:1.3;}
+.svc-desc{font-size:13px;color:var(--muted);line-height:1.7;}
+.svc-price{font-size:12px;font-weight:600;color:var(--teal-soft);margin-top:12px;}
+
+/* ── PAQUETES ── */
+.paq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;max-width:900px;margin:0 auto;}
+.paq-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;position:relative;}
+.paq-card.featured{border:2px solid var(--teal);}
+.paq-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:var(--teal);color:#0E0E0C;padding:3px 12px;border-radius:20px;white-space:nowrap;}
+.paq-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.paq-target{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.paq-price{font-family:'DM Serif Display',serif;font-size:28px;color:var(--teal-soft);margin-bottom:4px;}
+.paq-price-sub{font-size:12px;color:var(--hint);margin-bottom:16px;}
+.paq-items{display:flex;flex-direction:column;gap:7px;}
+.paq-item{font-size:12px;color:var(--muted);display:flex;gap:8px;line-height:1.5;align-items:flex-start;}
+.paq-item::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--teal-soft);flex-shrink:0;margin-top:6px;}
+
+/* ── PROCESO ── */
+.proceso-steps{max-width:700px;margin:0 auto;}
+.proceso-step{display:flex;gap:22px;padding:28px 0;border-bottom:1px solid var(--border);}
+.proceso-step:last-child{border-bottom:none;}
+.ps-num{font-family:'DM Serif Display',serif;font-size:44px;color:rgba(29,158,117,0.15);line-height:1;min-width:50px;user-select:none;}
+.ps-body{flex:1;padding-top:4px;}
+.ps-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-soft);margin-bottom:5px;}
+.ps-title{font-size:17px;font-weight:500;color:var(--text);margin-bottom:6px;line-height:1.3;}
+.ps-desc{font-size:13px;color:var(--muted);line-height:1.75;}
+.ps-time{font-size:12px;color:var(--teal-soft);font-weight:500;margin-top:6px;}
+
+/* ── CASO DE ÉXITO ── */
+.caso-wrap{max-width:800px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+.caso-header{padding:28px 32px;border-bottom:1px solid var(--border);display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.caso-badge{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--teal-soft);background:var(--teal-dim);padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:3px;}
+.caso-empresa{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:3px;}
+.caso-sector{font-size:13px;color:var(--muted);}
+.caso-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--border);}
+.caso-metric{background:var(--surface);padding:22px 24px;}
+.caso-metric-num{font-family:'DM Serif Display',serif;font-size:30px;color:var(--teal-soft);line-height:1;margin-bottom:5px;}
+.caso-metric-label{font-size:12px;color:var(--muted);line-height:1.5;}
+.caso-quote{padding:24px 32px;border-top:1px solid var(--border);font-size:15px;color:var(--muted);font-style:italic;line-height:1.8;}
+.caso-quote strong{color:var(--text);font-style:normal;}
+
+/* ── SECTORES ── */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;max-width:900px;margin:0 auto 32px;}
+@media(min-width:861px){
+  .sector-grid{grid-template-columns:repeat(4,1fr);}
+  .sector-card:nth-child(5){grid-column:2;}
+  .sector-card:nth-child(6){grid-column:3;}
+}
+.sector-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;transition:background .2s;}
+.sector-card:hover{background:var(--surface2);}
+.sector-card.nicho{border-color:rgba(29,158,117,0.4);}
+.sector-nicho-badge{position:absolute;top:12px;right:12px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;background:var(--teal-dim);color:var(--teal-soft);padding:2px 8px;border-radius:10px;}
+.sector-icon{font-size:22px;margin-bottom:10px;}
+.sector-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:6px;}
+.sector-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* ── DIAGNÓSTICO FORM ── */
+.diag-wrap{max-width:680px;margin:0 auto;}
+.diag-bullets{display:flex;flex-direction:column;gap:9px;margin:24px 0;text-align:left;}
+.d-bullet{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted);line-height:1.6;}
+.d-bullet::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--teal-soft);flex-shrink:0;margin-top:7px;}
+.diag-form{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:36px;}
+.form-row{margin-bottom:14px;}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.form-label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px;}
+.form-input,.form-select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;appearance:none;}
+.form-input:focus,.form-select:focus{border-color:var(--teal);}
+.form-input::placeholder{color:var(--hint);}
+.form-select option{background:var(--surface2);}
+.form-submit{width:100%;background:var(--teal);color:#0E0E0C;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;padding:14px;border-radius:8px;border:none;cursor:pointer;margin-top:8px;transition:transform .15s,opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.form-submit:hover{transform:translateY(-1px);opacity:.9;}
+.form-privacy{text-align:center;font-size:11px;color:var(--hint);margin-top:10px;line-height:1.6;}
+
+/* ── BOTÓN CONTACTO ALTERNATIVO ── */
+.contact-divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.contact-divider::before,.contact-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.contact-divider span{font-size:12px;color:var(--hint);white-space:nowrap;}
+.btn-contact-alt{width:100%;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:12px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-contact-alt:hover{border-color:var(--teal-soft);color:var(--text);}
+
+/* ── MODAL DE CONTACTO ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:2rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:36px;max-width:460px;width:100%;}
+.modal-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:6px;}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.modal-close{float:right;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;}
+
+/* ── FAQ ── */
+.faq-wrap{max-width:680px;margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--border);padding:18px 0;}
+.faq-q{font-size:15px;font-weight:500;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none;}
+.faq-icon{color:var(--teal-soft);font-size:18px;transition:transform .2s;flex-shrink:0;}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s;}
+.faq-item.open .faq-a{max-height:300px;padding-top:12px;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+
+/* ── FOOTER ── */
+footer{padding:48px max(2rem,5vw) 32px;border-top:1px solid var(--border);}
+.footer-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:17px;color:var(--text);text-decoration:none;}
+.footer-logo span{color:var(--teal);}
+.footer-links{display:flex;gap:22px;}
+.footer-links a{font-size:13px;color:var(--hint);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--muted);}
+.footer-copy{font-size:12px;color:var(--hint);text-align:center;margin-top:28px;}
+
+/* ── NOTA BOXES ── */
+.nota{border-radius:10px;padding:16px 18px;font-size:13px;line-height:1.7;margin-bottom:1rem;}
+.nota strong{display:block;margin-bottom:3px;font-weight:500;}
+.nota.green{background:rgba(29,158,117,0.1);border:1px solid rgba(29,158,117,0.2);color:rgba(93,202,165,0.9);}
+.nota.green strong{color:var(--teal-soft);}
+.nota.amber{background:rgba(239,159,39,0.08);border:1px solid rgba(239,159,39,0.2);color:rgba(239,159,39,0.8);}
+.nota.amber strong{color:#EF9F27;}
+.nota.blue{background:rgba(55,138,221,0.08);border:1px solid rgba(55,138,221,0.2);color:rgba(133,183,235,0.9);}
+.nota.blue strong{color:#85B7EB;}
+
+/* ── ANIMATIONS ── */
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;}
+  .hero-vsl{order:-1;}
+  .nav-links{display:none;}
+  .nav-mob{display:block;}
+  .nav-links.open{display:flex;flex-direction:column;position:fixed;top:64px;left:0;right:0;background:var(--surface);padding:20px 2rem;border-bottom:1px solid var(--border);gap:18px;}
+  .form-row-2{grid-template-columns:1fr;}
+  .footer-inner{flex-direction:column;text-align:center;}
+}
+@media(max-width:540px){
+  .hero{padding:80px max(1.25rem,4vw) 60px;}
+  .hero-inner{gap:28px;}
+  .hero-stats{gap:20px;}
+  .caso-header{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="nav-logo">Laura<span>.</span>Gave</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#servicios">Servicios</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#caso">Caso de éxito</a>
+    <a href="#diagnostico" class="nav-cta">Diagnóstico gratis</a>
+  </div>
+  <button class="nav-mob" onclick="toggleNav()">☰</button>
+</nav>
+
+<!-- ── HERO (col izq: copy | col der: VSL) ── -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-inner">
+
+    <!-- Columna izquierda: copy -->
+    <div class="hero-copy">
+      <div class="hero-eyebrow fade-up">Laura Gave · IA para tu empresa</div>
+
+      <h1 class="hero-title fade-up" style="transition-delay:.1s">
+        ¿Sabes cuánto te cuesta<br>
+        cada mes <em>no tener IA trabajando para ti?</em>
+      </h1>
+
+      <p class="hero-sub fade-up" style="transition-delay:.2s">
+        Descubre en 5 minutos qué procesos están deteniendo tu negocio y cuánto dinero pierdes cada mes por no aprovechar el potencial de la IA.
+      </p>
+
+      <div class="hero-actions fade-up" style="transition-delay:.3s">
+        <a href="#diagnostico" class="btn-primary">
+          Hacer el diagnóstico gratis
+          <span>→</span>
+        </a>
+        <a href="#proceso" class="btn-secondary">
+          Ver cómo funciona <span class="btn-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="hero-stats fade-up" style="transition-delay:.4s">
+        <div>
+          <div class="hero-stat-num">3 sem</div>
+          <div class="hero-stat-label">Primera entrega<br>en producción</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">−80%</div>
+          <div class="hero-stat-label">Tareas manuales<br>eliminadas</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">&lt;$10</div>
+          <div class="hero-stat-label">Costo operativo<br>mensual (USD)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna derecha: VSL -->
+    <div class="hero-vsl fade-up" style="transition-delay:.25s">
+      <div class="vsl-frame-hero" id="heroVsl">
+        <div class="vsl-glow-ring"></div>
+        <div class="vsl-inner">
+          <div class="vsl-play">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M7 5L20 12L7 19V5Z" fill="#0E0E0C"/>
+            </svg>
+          </div>
+          <div class="vsl-title">Mira cómo funciona</div>
+          <div class="vsl-sub">Agrega tu video aquí cuando esté listo</div>
+        </div>
+        <div class="vsl-badge">⏱ ~8 min</div>
+      </div>
+      <div class="vsl-note">
+        💡 Reemplaza <code>vsl-frame-hero</code> con un <code>&lt;iframe&gt;</code> de YouTube o Vimeo
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── SERVICIOS ── -->
+<section class="section dark" id="servicios">
+  <div class="sec-label fade-up">Lo que hago</div>
+  <h2 class="sec-title fade-up">Soluciones de IA<br>para tu operación</h2>
+  <p class="sec-sub fade-up">Implementaciones a la medida, no soluciones genéricas. Cada proyecto parte de entender exactamente qué le cuesta a tu empresa.</p>
+
+  <div class="svc-grid fade-up">
+    <div class="svc-card">
+      <div class="svc-accent" style="background:#1D9E75;"></div>
+      <span class="svc-icon">💬</span>
+      <div class="svc-num">01</div>
+      <div class="svc-name">Agente de IA en WhatsApp</div>
+      <div class="svc-desc">Responde preguntas, cotiza productos y califica leads automáticamente — 24/7, sin que tú intervengas en cada mensaje.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent" style="background:#5DCAA5;"></div>
+      <span class="svc-icon">📊</span>
+      <div class="svc-num">02</div>
+      <div class="svc-name">Dashboard y analítica de datos</div>
+      <div class="svc-desc">Transforma tus datos dispersos en un tablero que se actualiza solo. Toma decisiones con información real, no con intuición.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent" style="background:#1D9E75;"></div>
+      <span class="svc-icon">⚙️</span>
+      <div class="svc-num">03</div>
+      <div class="svc-name">Automatización de procesos</div>
+      <div class="svc-desc">Elimina las tareas repetitivas que consumen horas de tu equipo. Reportes, ingresos de datos, notificaciones — sin intervención humana.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent" style="background:#5DCAA5;"></div>
+      <span class="svc-icon">📄</span>
+      <div class="svc-num">04</div>
+      <div class="svc-name">Procesamiento de documentos</div>
+      <div class="svc-desc">Facturas, contratos, formularios físicos — extraídos, clasificados y registrados automáticamente usando visión artificial.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent" style="background:#1D9E75;"></div>
+      <span class="svc-icon">🏗️</span>
+      <div class="svc-num">05</div>
+      <div class="svc-name">App a la medida</div>
+      <div class="svc-desc">Para procesos muy específicos que ninguna herramienta genérica puede resolver. Desarrollo personalizado con IA integrada.</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent" style="background:#5DCAA5;"></div>
+      <span class="svc-icon">🔍</span>
+      <div class="svc-num">06</div>
+      <div class="svc-name">Diagnóstico con ROI</div>
+      <div class="svc-desc">Mapeo completo de tus procesos, cuantificación del costo actual y propuesta de las 3 oportunidades de automatización de mayor impacto.</div>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- ── SECTORES ── -->
+<section class="section" id="sectores">
+  <div class="sec-label fade-up">Sectores</div>
+  <h2 class="sec-title fade-up">Empresas donde genero impacto</h2>
+  <p class="sec-sub fade-up">Me especializo en negocios que quieren dar un paso hacia adelante.</p>
+
+  <div class="sector-grid fade-up">
+    <div class="sector-card nicho">
+      <div class="sector-icon">🏥</div>
+      <div class="sector-name">Salud y bienestar</div>
+      <div class="sector-desc">Clínicas, consultorios, laboratorios. Agendamiento, recordatorios, analítica de citas.</div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-icon">🏭</div>
+      <div class="sector-name">Manufactura</div>
+      <div class="sector-desc">Fábricas medianas. Cotizaciones, control de pedidos, reportes de producción.</div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-icon">🏪</div>
+      <div class="sector-name">Retail y comercio</div>
+      <div class="sector-desc">Distribuidoras y tiendas. Atención al cliente, inventario, pedidos automatizados.</div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-icon">⚖️</div>
+      <div class="sector-name">Servicios profesionales</div>
+      <div class="sector-desc">Contadores, abogados, consultores. Documentos, agendamiento, reportes.</div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-icon">🏗️</div>
+      <div class="sector-name">Construcción</div>
+      <div class="sector-desc">Constructoras y arquitectura. Seguimiento de obra y gestión documental.</div>
+    </div>
+    <div class="sector-card">
+      <div class="sector-icon">🎓</div>
+      <div class="sector-name">Educación privada</div>
+      <div class="sector-desc">Colegios e institutos. Inscripciones, seguimiento y comunicación.</div>
+    </div>
+  </div>
+
+  <div class="nota blue fade-up" style="max-width:680px;margin:0 auto;">
+    <strong>¿No te encuentras aquí?</strong>
+    ¿Tu sector no aparece aquí?
+    Si tu equipo responde mensajes manuales, hace reportes en Excel, ingresa datos a mano o pierde ventas por falta de seguimiento — probablemente puedo ayudarte. Haz el diagnóstico y lo sabemos con certeza.
+  </div>
+</section>
+
+<!-- ── PROCESO ── -->
+<section class="section dark" id="proceso">
+  <div class="sec-label fade-up">El proceso</div>
+  <h2 class="sec-title fade-up">De conversación<br>a resultados en 4 semanas</h2>
+  <p class="sec-sub fade-up">Sin tecnicismos, sin grandes equipos, sin esperas de meses.</p>
+
+  <div class="proceso-steps fade-up">
+    <div class="proceso-step">
+      <div class="ps-num">01</div>
+      <div class="ps-body">
+        <div class="ps-label">Diagnóstico</div>
+        <div class="ps-title">Entiendo tu negocio en 30 minutos</div>
+        <div class="ps-desc">Hablamos por videollamada. Identifico qué procesos te cuestan más tiempo y dinero. Calculo el ROI potencial de cada solución. Sin compromiso.</div>
+        <div class="ps-time">Semana 1 · Gratis</div>
+      </div>
+    </div>
+    <div class="proceso-step">
+      <div class="ps-num">02</div>
+      <div class="ps-body">
+        <div class="ps-label">Propuesta</div>
+        <div class="ps-title">Precio fijo, alcance claro, fecha comprometida</div>
+        <div class="ps-desc">En 48 horas recibes la propuesta con el problema, la solución específica para tu empresa y el ROI estimado. Sin letra pequeña.</div>
+        <div class="ps-time">Semana 1 · 48h después del diagnóstico</div>
+      </div>
+    </div>
+    <div class="proceso-step">
+      <div class="ps-num">03</div>
+      <div class="ps-body">
+        <div class="ps-label">Implementación</div>
+        <div class="ps-title">Construyo en fases cortas — ves el progreso</div>
+        <div class="ps-desc">Demos cada semana. No esperas meses para ver algo funcionar. Tú ves el avance, puedes dar feedback y ajustar en cada paso.</div>
+        <div class="ps-time">Semanas 2–4</div>
+      </div>
+    </div>
+    <div class="proceso-step">
+      <div class="ps-num">04</div>
+      <div class="ps-body">
+        <div class="ps-label">Soporte continuo</div>
+        <div class="ps-title">Acompañamiento mensual para que siempre funcione</div>
+        <div class="ps-desc">Retainer mensual accesible: mantenimiento, ajustes, mejoras con datos reales. No desaparezco después de entregar.</div>
+        <div class="ps-time">Mes 2 en adelante · Desde $1.5M COP/mes</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota green fade-up" style="max-width:680px;margin:32px auto 0;">
+    <strong>Lo que nunca hago</strong>
+    No vendo proyectos de 6 meses antes de mostrar nada. No propongo herramientas caras que no necesitas. Si al final del diagnóstico la IA no aplica a tu negocio ahora, te lo digo — y te digo qué sí aplicaría.
+  </div>
+</section>
+
+
+<!-- ── DIAGNÓSTICO FORM ── -->
+<section class="section dark" id="diagnostico">
+  <div class="diag-wrap">
+    <div class="sec-label fade-up">Diagnóstico gratuito</div>
+    <h2 class="sec-title fade-up">Descubre cuánto pierde<br>tu empresa hoy</h2>
+    <p class="sec-sub fade-up" style="margin-bottom:0;">En 5 minutos identificamos qué procesos te están costando más y qué tan rápido puede pagarse una solución de IA.</p>
+
+    <div class="diag-bullets fade-up">
+      <div class="d-bullet">Recibes un reporte personalizado por correo con el costo estimado del problema</div>
+      <div class="d-bullet">Identificamos las 3 oportunidades de automatización más urgentes para tu sector</div>
+      <div class="d-bullet">Sin compromiso — si no hay oportunidad real, te lo digo directamente</div>
+    </div>
+
+    <div class="diag-form fade-up">
+      <form onsubmit="handleDiag(event)">
+        <div class="form-row">
+          <label class="form-label">Nombre completo</label>
+          <input class="form-input" type="text" placeholder="Carlos Restrepo" required>
+        </div>
+        <div class="form-row-2">
+          <div>
+            <label class="form-label">Correo electrónico</label>
+            <input class="form-input" type="email" placeholder="carlos@empresa.com" required>
+          </div>
+          <div>
+            <label class="form-label">WhatsApp</label>
+            <input class="form-input" type="tel" placeholder="+57 300 000 0000">
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Sector de tu empresa</label>
+          <select class="form-select" required>
+            <option value="" disabled selected>Selecciona tu sector</option>
+            <option>Manufactura / Producción</option>
+            <option>Salud / Clínicas</option>
+            <option>Servicios profesionales</option>
+            <option>Retail / Comercio</option>
+            <option>Construcción / Inmobiliaria</option>
+            <option>Logística / Transporte</option>
+            <option>Educación</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Mensajes diarios por WhatsApp</label>
+          <select class="form-select">
+            <option value="" disabled selected>Selecciona un rango</option>
+            <option>Menos de 10</option>
+            <option>10 – 30</option>
+            <option>30 – 60</option>
+            <option>Más de 60</option>
+          </select>
+        </div>
+        <button type="submit" class="form-submit" id="diagBtn">
+          Quiero mi diagnóstico gratis →
+        </button>
+        <div class="form-privacy">
+          Tu información es confidencial. Recibirás tu reporte en menos de 24 horas.
+        </div>
+      </form>
+
+      <!-- Botón alternativo de contacto -->
+      <div class="contact-divider"><span>¿Prefieres simplemente hablar?</span></div>
+      <button class="btn-contact-alt" onclick="openModal()">
+        No deseo el diagnóstico, pero sí ponerme en contacto →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="section" id="faq">
+  <div class="sec-label fade-up">Preguntas frecuentes</div>
+  <h2 class="sec-title fade-up">Resolvemos tus dudas</h2>
+
+  <div class="faq-wrap fade-up">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Necesito saber de tecnología para trabajar contigo?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">No. Mi trabajo es exactamente traducir el lenguaje técnico al lenguaje del negocio. Tú me dices qué problema tienes — yo entrego la solución funcionando. No necesitas entender cómo funciona por dentro.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Cuánto cuesta implementar una solución?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Cada empresa es diferente, y el precio también lo es. No pago soluciones genéricas — cada implementación parte de entender exactamente qué problema tiene tu empresa y qué impacto tendrá en tus cifras. Una solución que le ahorra $5M al mes a tu negocio no puede costar lo mismo que una que ahorra $500K. El criterio siempre es el mismo: que recuperes la inversión en los primeros 3 meses. El diagnóstico inicial es el primer paso para tener ese número con certeza.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Qué pasa si algo falla después de implementarlo?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">El retainer mensual incluye mantenimiento y soporte. Si algo falla, lo resuelvo. No estás solo después de la entrega — esa es la diferencia entre contratar una consultora de verdad y pagar por un servicio de una sola vez.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿En cuánto tiempo se nota el impacto?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Las soluciones más simples (agente de WhatsApp, automatización de reportes) se notan desde la primera semana. Las más complejas en 3 a 6 semanas. Si en el primer mes no ves un cambio visible, algo está mal — y lo corrijo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        ¿Solo trabajas con empresas colombianas o también internacionales?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-a">Trabajo con empresas de Colombia y de cualquier país de habla hispana. Todo el proceso es 100% remoto — diagnóstico, implementación y soporte se hacen por videollamada y comunicación digital. He trabajado con empresas en varias ciudades de Colombia y la metodología funciona igual sin importar la ubicación. Si tu empresa habla español y tiene procesos que automatizar, podemos trabajar juntos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">Laura<span>.</span>Gave</a>
+    <div class="footer-links">
+      <a href="#servicios">Servicios</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#caso">Caso de éxito</a>
+      <a href="#diagnostico">Diagnóstico</a>
+    </div>
+    <div style="font-size:13px;color:var(--hint);">Medellín, Colombia</div>
+  </div>
+  <div class="footer-copy">© 2026 Laura Gave · Consultoría en IA y Automatización para PYMEs</div>
+</footer>
+
+<!-- ── MODAL CONTACTO ── -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Hablemos</div>
+    <div class="modal-sub">Déjame tus datos y te contacto en menos de 24 horas para conocer más sobre tu empresa.</div>
+    <form onsubmit="handleContact(event)">
+      <div class="form-row">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" type="text" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-row">
+        <label class="form-label">Correo o WhatsApp</label>
+        <input class="form-input" type="text" placeholder="correo@empresa.com o +57 300..." required>
+      </div>
+      <div class="form-row">
+        <label class="form-label">¿Sobre qué quieres hablar? (opcional)</label>
+        <input class="form-input" type="text" placeholder="Ej: tengo una clínica y quiero automatizar citas">
+      </div>
+      <button type="submit" class="form-submit" id="contactBtn" style="margin-top:8px;">
+        Enviar y esperar contacto →
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleNav(){document.getElementById('navLinks').classList.toggle('open');}
+
+function toggleFaq(el){
+  const item=el.parentElement;
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+
+function handleDiag(e){
+  e.preventDefault();
+  const btn=document.getElementById('diagBtn');
+  btn.textContent='✓ Reporte en camino — revisa tu correo';
+  btn.style.background='#085041';
+  btn.disabled=true;
+}
+
+function openModal(){document.getElementById('contactModal').classList.add('open');}
+function closeModal(){document.getElementById('contactModal').classList.remove('open');}
+document.getElementById('contactModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+function handleContact(e){
+  e.preventDefault();
+  const btn=document.getElementById('contactBtn');
+  btn.textContent='✓ Recibido — te contacto pronto';
+  btn.style.background='#085041';
+  btn.disabled=true;
+  setTimeout(closeModal,2000);
+}
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
