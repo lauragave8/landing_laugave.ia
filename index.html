@@ -207,6 +207,41 @@ footer{padding:48px max(2rem,5vw) 32px;border-top:1px solid var(--border);}
 .nota.blue{background:rgba(55,138,221,0.08);border:1px solid rgba(55,138,221,0.2);color:rgba(133,183,235,0.9);}
 .nota.blue strong{color:#85B7EB;}
 
+/* ── QUIZ DIAGNÓSTICO ── */
+.quiz-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:32px;margin-top:32px;overflow:hidden;}
+.quiz-progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.quiz-step-label{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--hint);}
+.quiz-progress-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:32px;}
+.quiz-progress-bar{height:100%;background:var(--teal);border-radius:2px;transition:width .4s ease;}
+.quiz-step{display:none;}
+.quiz-step.active{display:block;animation:qFadeIn .32s ease;}
+.quiz-step.go-back{animation:qFadeBack .32s ease;}
+@keyframes qFadeIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+@keyframes qFadeBack{from{opacity:0;transform:translateX(-20px);}to{opacity:1;transform:translateX(0);}}
+.quiz-q{font-family:'DM Serif Display',serif;font-size:clamp(18px,2.2vw,23px);color:var(--text);margin-bottom:8px;line-height:1.3;}
+.quiz-hint{font-size:13px;color:var(--hint);margin-bottom:22px;}
+.quiz-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:8px;}
+.quiz-opts.single-col{grid-template-columns:1fr;}
+.quiz-opt{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--muted);text-align:left;cursor:pointer;transition:border-color .18s,background .18s,color .18s;line-height:1.4;width:100%;}
+.quiz-opt:hover{border-color:var(--teal-soft);color:var(--text);}
+.quiz-opt.selected{border-color:var(--teal);color:var(--text);background:var(--teal-dim);box-shadow:0 0 0 1px var(--teal);}
+.quiz-nav{display:none;margin-top:18px;}
+.quiz-back-btn{background:none;border:none;color:var(--hint);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:4px 0;transition:color .2s;display:inline-flex;align-items:center;gap:4px;}
+.quiz-back-btn:hover{color:var(--muted);}
+.quiz-final-form{display:flex;flex-direction:column;gap:14px;}
+.quiz-confirm{display:none;text-align:center;padding:48px 20px;}
+.quiz-check-circle{width:70px;height:70px;border-radius:50%;background:var(--teal-dim);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;animation:checkPop .45s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes checkPop{from{transform:scale(0.4);opacity:0;}to{transform:scale(1);opacity:1;}}
+.quiz-check-svg{width:32px;height:32px;stroke:var(--teal-soft);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.quiz-check-path{stroke-dasharray:40;stroke-dashoffset:40;animation:checkDraw .5s .35s ease forwards;}
+@keyframes checkDraw{to{stroke-dashoffset:0;}}
+.quiz-confirm-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);margin-bottom:10px;}
+.quiz-confirm-sub{font-size:14px;color:var(--muted);line-height:1.8;max-width:400px;margin:0 auto;}
+@media(max-width:600px){
+  .quiz-wrap{padding:22px 16px;}
+  .quiz-opts,.quiz-opts.single-col{grid-template-columns:1fr;}
+}
+
 /* ── ANIMATIONS ── */
 .fade-up{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
 .fade-up.visible{opacity:1;transform:translateY(0);}
@@ -465,63 +500,164 @@ footer{padding:48px max(2rem,5vw) 32px;border-top:1px solid var(--border);}
 </section>
 
 
-<!-- ── DIAGNÓSTICO FORM ── -->
+<!-- ── DIAGNÓSTICO QUIZ ── -->
 <section class="section dark" id="diagnostico">
   <div class="diag-wrap">
     <div class="sec-label fade-up">Diagnóstico gratuito</div>
     <h2 class="sec-title fade-up">Descubre cuánto pierde<br>tu empresa hoy</h2>
-    <p class="sec-sub fade-up" style="margin-bottom:0;">En 5 minutos identificamos qué procesos te están costando más y qué tan rápido puede pagarse una solución de IA.</p>
+    <p class="sec-sub fade-up" style="margin-bottom:0;">Responde 8 preguntas rápidas y recibe un reporte personalizado con las oportunidades de automatización más urgentes para tu empresa.</p>
 
-    <div class="diag-bullets fade-up">
-      <div class="d-bullet">Recibes un reporte personalizado por correo con el costo estimado del problema</div>
-      <div class="d-bullet">Identificamos las 3 oportunidades de automatización más urgentes para tu sector</div>
-      <div class="d-bullet">Sin compromiso — si no hay oportunidad real, te lo digo directamente</div>
-    </div>
+    <div class="quiz-wrap fade-up" id="quizWrap">
 
-    <div class="diag-form fade-up">
-      <form onsubmit="handleDiag(event)">
-        <div class="form-row">
-          <label class="form-label">Nombre completo</label>
-          <input class="form-input" type="text" placeholder="Carlos Restrepo" required>
-        </div>
-        <div class="form-row-2">
-          <div>
-            <label class="form-label">Correo electrónico</label>
-            <input class="form-input" type="email" placeholder="carlos@empresa.com" required>
+      <!-- Progreso -->
+      <div class="quiz-progress-header">
+        <span class="quiz-step-label" id="quizStepLabel">Paso 1 de 9</span>
+      </div>
+      <div class="quiz-progress-track">
+        <div class="quiz-progress-bar" id="quizProgressBar" style="width:11%"></div>
+      </div>
+
+      <!-- Pasos -->
+      <div id="quizStepsContainer">
+
+        <!-- PASO 1 -->
+        <div class="quiz-step active" id="qstep-1">
+          <div class="quiz-q">¿A qué sector pertenece tu empresa?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Manufactura / Producción')">🏭 Manufactura / Producción</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Salud / Clínicas')">🏥 Salud / Clínicas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Servicios profesionales')">⚖️ Servicios profesionales</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Retail / Comercio')">🏪 Retail / Comercio</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Construcción / Inmobiliaria')">🏗️ Construcción / Inmobiliaria</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Educación')">🎓 Educación</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'sector','Otro')">✦ Otro</button>
           </div>
-          <div>
-            <label class="form-label">WhatsApp</label>
-            <input class="form-input" type="tel" placeholder="+57 300 000 0000">
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="quiz-step" id="qstep-2">
+          <div class="quiz-q">¿Cuántas personas trabajan en tu empresa?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'empleados','1-5 personas')">1 – 5 personas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'empleados','6-20 personas')">6 – 20 personas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'empleados','21-50 personas')">21 – 50 personas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'empleados','Más de 50')">Más de 50</button>
           </div>
         </div>
-        <div class="form-row">
-          <label class="form-label">Sector de tu empresa</label>
-          <select class="form-select" required>
-            <option value="" disabled selected>Selecciona tu sector</option>
-            <option>Manufactura / Producción</option>
-            <option>Salud / Clínicas</option>
-            <option>Servicios profesionales</option>
-            <option>Retail / Comercio</option>
-            <option>Construcción / Inmobiliaria</option>
-            <option>Logística / Transporte</option>
-            <option>Educación</option>
-            <option>Otro</option>
-          </select>
-        </div>
-        <button type="submit" class="form-submit" id="diagBtn">
-          Quiero mi diagnóstico gratis →
-        </button>
-        <div class="form-privacy">
-          Tu información es confidencial. Recibirás tu reporte en menos de 24 horas.
-        </div>
-      </form>
 
-      <!-- Botón alternativo de contacto -->
-      <div class="contact-divider"><span>¿Prefieres simplemente hablar?</span></div>
-      <button class="btn-contact-alt" onclick="openModal()">
-        No deseo el diagnóstico, pero sí ponerme en contacto →
-      </button>
-    </div>
+        <!-- PASO 3 -->
+        <div class="quiz-step" id="qstep-3">
+          <div class="quiz-q">¿Cuál es tu rol en la empresa?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'rol','Dueño / Gerente general')">Dueño / Gerente general</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'rol','Gerente administrativo')">Gerente administrativo</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'rol','Coordinador operativo')">Coordinador operativo</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'rol','Otro')">Otro</button>
+          </div>
+        </div>
+
+        <!-- PASO 4 -->
+        <div class="quiz-step" id="qstep-4">
+          <div class="quiz-q">¿Cuántos mensajes o solicitudes reciben al día por WhatsApp o correo?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'mensajes','Menos de 10')">Menos de 10</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'mensajes','10 - 30')">10 – 30</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'mensajes','30 - 60')">30 – 60</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'mensajes','Más de 60')">Más de 60</button>
+          </div>
+        </div>
+
+        <!-- PASO 5 -->
+        <div class="quiz-step" id="qstep-5">
+          <div class="quiz-q">¿Cuántas horas a la semana dedican a tareas manuales y repetitivas?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'horas','Menos de 5 horas')">Menos de 5 horas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'horas','5 - 15 horas')">5 – 15 horas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'horas','15 - 30 horas')">15 – 30 horas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'horas','Más de 30 horas')">Más de 30 horas</button>
+          </div>
+        </div>
+
+        <!-- PASO 6 -->
+        <div class="quiz-step" id="qstep-6">
+          <div class="quiz-q">¿Cuántas ventas estimas que pierdes al mes por no responder a tiempo o no dar seguimiento?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'ventas','Ninguna')">Ninguna</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'ventas','1 - 3 ventas')">1 – 3 ventas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'ventas','3 - 10 ventas')">3 – 10 ventas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'ventas','Más de 10 ventas')">Más de 10 ventas</button>
+          </div>
+        </div>
+
+        <!-- PASO 7 -->
+        <div class="quiz-step" id="qstep-7">
+          <div class="quiz-q">¿Qué herramientas digitales usa tu empresa hoy?</div>
+          <div class="quiz-opts single-col">
+            <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Solo WhatsApp y Excel')">Solo WhatsApp y Excel</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Tenemos algún software básico')">Tenemos algún software básico</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Varias herramientas pero no conectadas')">Varias herramientas pero no conectadas</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Sistemas robustos pero quiero más automatización')">Sistemas robustos pero quiero más automatización</button>
+          </div>
+        </div>
+
+        <!-- PASO 8 -->
+        <div class="quiz-step" id="qstep-8">
+          <div class="quiz-q">Si encontraras la solución correcta, ¿en cuánto tiempo estarías listo para implementarla?</div>
+          <div class="quiz-opts">
+            <button class="quiz-opt" onclick="selectOpt(this,'urgencia','Lo estoy evaluando')">Lo estoy evaluando</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'urgencia','En 1 - 3 meses')">En 1 – 3 meses</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'urgencia','En menos de un mes')">En menos de un mes</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'urgencia','Ahora mismo')">Ahora mismo</button>
+          </div>
+        </div>
+
+        <!-- PASO 9 — FINAL -->
+        <div class="quiz-step" id="qstep-9">
+          <div class="quiz-q">Tu diagnóstico está casi listo</div>
+          <div class="quiz-hint">¿Dónde enviamos tu reporte personalizado?</div>
+          <form class="quiz-final-form" onsubmit="handleQuizSubmit(event)">
+            <div class="form-row" style="margin-bottom:0">
+              <label class="form-label">Nombre completo</label>
+              <input class="form-input" id="quizNombre" type="text" placeholder="Carlos Restrepo" required>
+            </div>
+            <div class="form-row" style="margin-bottom:0">
+              <label class="form-label">Correo electrónico</label>
+              <input class="form-input" id="quizEmail" type="email" placeholder="carlos@empresa.com" required>
+            </div>
+            <div class="form-row" style="margin-bottom:0">
+              <label class="form-label">WhatsApp <span style="color:var(--hint);font-weight:400;">(recomendado)</span></label>
+              <input class="form-input" id="quizWhatsapp" type="tel" placeholder="+57 300 000 0000">
+            </div>
+            <button type="submit" class="form-submit" id="quizSubmitBtn">Ver mi diagnóstico →</button>
+            <div class="form-privacy">Tu información es confidencial. Recibirás tu reporte en menos de 24 horas.</div>
+          </form>
+        </div>
+
+      </div><!-- /quizStepsContainer -->
+
+      <!-- Navegación -->
+      <div class="quiz-nav" id="quizNav">
+        <button class="quiz-back-btn" onclick="quizGoBack()">← Atrás</button>
+      </div>
+
+      <!-- Confirmación -->
+      <div class="quiz-confirm" id="quizConfirm">
+        <div class="quiz-check-circle">
+          <svg class="quiz-check-svg" viewBox="0 0 24 24">
+            <polyline class="quiz-check-path" points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div class="quiz-confirm-title">Tu reporte está en camino</div>
+        <div class="quiz-confirm-sub">Revisa tu correo en los próximos minutos.<br>Te contactaré personalmente para agendar tu diagnóstico completo.</div>
+      </div>
+
+    </div><!-- /quiz-wrap -->
+
+    <!-- Botón alternativo de contacto -->
+    <div class="contact-divider"><span>¿Prefieres simplemente hablar?</span></div>
+    <button class="btn-contact-alt" onclick="openModal()">
+      No deseo el diagnóstico, pero sí ponerme en contacto →
+    </button>
   </div>
 </section>
 
@@ -620,12 +756,61 @@ function toggleFaq(el){
   if(!wasOpen)item.classList.add('open');
 }
 
-function handleDiag(e){
+// ── QUIZ ──
+const quizAnswers={};
+let quizCurrentStep=1;
+const QUIZ_TOTAL=9;
+
+function updateQuizProgress(step){
+  const pct=Math.round((step/QUIZ_TOTAL)*100);
+  document.getElementById('quizProgressBar').style.width=pct+'%';
+  document.getElementById('quizStepLabel').textContent='Paso '+step+' de '+QUIZ_TOTAL;
+  document.getElementById('quizNav').style.display=step>1?'block':'none';
+}
+
+function showQuizStep(nextStep,direction){
+  const current=document.getElementById('qstep-'+quizCurrentStep);
+  const next=document.getElementById('qstep-'+nextStep);
+  if(current)current.classList.remove('active','go-back');
+  if(next){
+    next.classList.remove('active','go-back');
+    if(direction==='back')next.classList.add('go-back');
+    next.offsetHeight;
+    next.classList.add('active');
+  }
+  quizCurrentStep=nextStep;
+  updateQuizProgress(nextStep);
+}
+
+function selectOpt(btn,field,value){
+  btn.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.classList.remove('selected'));
+  btn.classList.add('selected');
+  quizAnswers[field]=value;
+  if(quizCurrentStep<QUIZ_TOTAL){
+    setTimeout(()=>showQuizStep(quizCurrentStep+1,'forward'),280);
+  }
+}
+
+function quizGoBack(){
+  if(quizCurrentStep>1)showQuizStep(quizCurrentStep-1,'back');
+}
+
+function handleQuizSubmit(e){
   e.preventDefault();
-  const btn=document.getElementById('diagBtn');
-  btn.textContent='✓ Reporte en camino — revisa tu correo';
-  btn.style.background='#085041';
+  const btn=document.getElementById('quizSubmitBtn');
+  btn.textContent='Procesando...';
   btn.disabled=true;
+  quizAnswers.nombre=document.getElementById('quizNombre').value;
+  quizAnswers.email=document.getElementById('quizEmail').value;
+  quizAnswers.whatsapp=document.getElementById('quizWhatsapp').value;
+  // Conectar con /api/diagnostico cuando esté disponible
+  setTimeout(()=>{
+    document.getElementById('quizStepsContainer').style.display='none';
+    document.getElementById('quizNav').style.display='none';
+    document.getElementById('quizProgressBar').closest('.quiz-progress-track').style.display='none';
+    document.getElementById('quizStepLabel').style.display='none';
+    document.getElementById('quizConfirm').style.display='block';
+  },500);
 }
 
 function openModal(){document.getElementById('contactModal').classList.add('open');}
