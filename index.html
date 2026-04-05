@@ -43,7 +43,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 max(2rem,5vw);heig
 .hero-glow{position:absolute;top:-80px;right:-80px;width:560px;height:560px;background:radial-gradient(circle,rgba(29,158,117,0.09) 0%,transparent 65%);z-index:0;pointer-events:none;}
 .hero-glow2{position:absolute;bottom:-100px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(29,158,117,0.04) 0%,transparent 65%);z-index:0;pointer-events:none;}
 
-.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:center;max-width:1100px;margin:0 auto;width:100%;}
+.hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.2fr;gap:56px;align-items:center;max-width:1280px;margin:0 auto;width:100%;}
 
 /* LEFT — copy */
 .hero-copy{}
@@ -272,7 +272,6 @@ footer{padding:48px max(2rem,5vw) 32px;border-top:1px solid var(--border);}
   <div class="nav-links" id="navLinks">
     <a href="#servicios">Servicios</a>
     <a href="#proceso">Proceso</a>
-    <a href="#caso">Caso de éxito</a>
     <a href="#diagnostico" class="nav-cta">Diagnóstico gratis</a>
   </div>
   <button class="nav-mob" onclick="toggleNav()">☰</button>
@@ -593,7 +592,7 @@ footer{padding:48px max(2rem,5vw) 32px;border-top:1px solid var(--border);}
         <div class="quiz-step" id="qstep-7">
           <div class="quiz-q">¿Qué herramientas digitales usa tu empresa hoy?</div>
           <div class="quiz-opts single-col">
-            <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Solo WhatsApp y Excel')">Solo WhatsApp y Excel</button>
+            <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Solo WhatsApp y Excel')">Solo WhatsApp, Excel, Correo</button>
             <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Tenemos algún software básico')">Tenemos algún software básico</button>
             <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Varias herramientas pero no conectadas')">Varias herramientas pero no conectadas</button>
             <button class="quiz-opt" onclick="selectOpt(this,'herramientas','Sistemas robustos pero quiero más automatización')">Sistemas robustos pero quiero más automatización</button>
