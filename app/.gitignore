@@ -1,0 +1,12 @@
+# Next.js
+.next/
+out/
+node_modules/
+
+# Variables de entorno — NUNCA subir al repo
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
